@@ -7,8 +7,8 @@ Here is description of the project and showing demos
 - [ ] GUI, tools for adding/deleting new persons in graph
 
 ### Additional features
-- [ ]
-- [ ]
+- [ ] Feature 1
+- [ ] Feature 2
 
 ### Tests
 Instructions for launch tests
