@@ -4,19 +4,19 @@ VKFriends - GUI application written on Java, that provides user to visualize con
 
 ### Features
 
-- [ ] GUI 
+- [ ] GUI</br>
+*There will be a demo screenshot* </br>
+
+- [ ] Constructing a Graph, that shows common friends between each 2 accounts.</br>  
 *There will be a demo screenshot* 
 
-- [ ] Constructing a Graph, that shows common friends between each 2 accounts.
-*There will be a demo screenshot* 
-
-- [ ] Add/Remove account from graph. User can enter the id/url of account and add or remove it from graph.
+- [ ] Add/Remove account from graph. User can enter the id/url of account and add or remove it from graph.</br>
 *There will be a demo screenshot*
 
-- [ ] Minimal info about users by pressing on it's vertex in graph.
+- [ ] Minimal info about users by pressing on it's vertex in graph.</br>
 *There will be a demo screenshot* 
 
-- [ ] Algorithm, that constructs minimal frame tree from this graph. 
+- [ ] Algorithm, that constructs minimal frame tree from this graph.</br>
 *There will be a demo screenshot* 
 
 ### Tests
