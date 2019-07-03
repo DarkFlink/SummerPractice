@@ -7,8 +7,8 @@ VKFriends - GUI application written on Java, that provides user to visualize con
 - [ ] GUI</br>
 *There will be a demo screenshot* </br>
 
-- [ ] Constructing a Graph, that shows common friends between each 2 accounts.</br>  
-*There will be a demo screenshot* 
+- [ ] Constructing a Graph, that shows common friends between each 2 accounts.</br>
+*There will be a demo screenshot*
 
 - [ ] Add/Remove account from graph. User can enter the id/url of account and add or remove it from graph.</br>
 *There will be a demo screenshot*
