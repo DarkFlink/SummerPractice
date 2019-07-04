@@ -1,13 +1,13 @@
 ## VKFriends
 ### Description
-VKFriends - GUI application written on Java, that provides user to visualize connections between different Vkontakte accounts. It builds graph, which vertices are different Vkontakte accounts, edges - number of common friends of these two accounts. Basically, it uses adjacency list graph representation and Krascal algorithm of building minimal frame tree. GUI written using Swiss.
+VKFriends - GUI приложение, написанное на Java, позволяющее пользователя визуализировать связи между разными аккаунтами вконтакте. Оно строит граф, вершины которого - разные ВК аккаунты, рёбро - наличие или отсутствие общих друзей, вес этого ребра - количество общих друзей. В основе графа - список смежности. Также, есть возможность построить максимальное остовное дерево из этого графа с помощью алгоритма Краскала. 
 
 ### Features
 
 - [ ] GUI</br>
-*There will be a demo screenshot* </br>
+*There will be a demo screenshot*
 
-- [ ] Constructing a Graph, that shows common friends between each 2 accounts.</br>
+- [ ] Стоит граф, у которого вершины - ВК аккаунты, ребра - общие друзья, есть они или нет.</br>
 *There will be a demo screenshot*
 
 - [ ] Add/Remove account from graph. User can enter the id/url of account and add or remove it from graph.</br>
@@ -24,6 +24,8 @@ Instructions for launch tests
 
 ### Usage
 Here is instructions for launching and using VKFriends
+
+### Development plan
 
 ### For contributors
 * Do your work in separate branches
