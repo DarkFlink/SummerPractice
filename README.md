@@ -4,23 +4,23 @@ VKFriends - GUI приложение, написанное на Java, позво
 
 ### Features
 
-- [ ] GUI</br>
-*There will be a demo screenshot*
+- [ ] Графический интерфейс</br>
+*Будет создан демо скриншот*
 
-- [ ] Стоит граф, у которого вершины - ВК аккаунты, ребра - общие друзья, есть они или нет.</br>
-*There will be a demo screenshot*
+- [ ] Строит граф, у которого вершины - ВК аккаунты, ребра - общие друзья, есть они или нет.</br>
+*Будет создан демо скриншот*
 
-- [ ] Add/Remove account from graph. User can enter the id/url of account and add or remove it from graph.</br>
-*There will be a demo screenshot*
+- [ ] Удаление и добавление вершины в графе.Пользователь может ввести айди/ссылку на аккаунт и добавить/удалить его из графа.</br>
+*Будет создан демо скриншот*
 
-- [ ] Minimal info about users by pressing on it's vertex in graph.</br>
-*There will be a demo screenshot* 
+- [ ] Минимальная информация о пользователе с помощью нажатия на вершину графа.</br>
+*Будет создан демо скриншот* 
 
-- [ ] Algorithm, that constructs minimal frame tree from this graph.</br>
-*There will be a demo screenshot* 
+- [ ] Алгоритм, создающий минимальное остовное дерево из этого графа.</br>
+*Будет создан демо скриншот* 
 
 ### Tests
-Instructions for launch tests
+Научиться пользоваться юнит тестами
 
 ### Usage
 Here is instructions for launching and using VKFriends
@@ -28,15 +28,15 @@ Here is instructions for launching and using VKFriends
 ### Development plan
 
 ### For contributors
-* Do your work in separate branches
-* Name branches with # <_issue_id_> branch name
-* Create pull-requests with prefix WIP: (Work in progress) if work is not finished
-* Do not merge in master
-* One issue - one pull-request - one branch
-* PR form: #<_issue_id_> pr name
-* All PRs need to follow with comments
+* Разработка программы на разных ветках
+* Новая ветка должна быть создана как:# <_issue_id_> имя ветки.
+* создание пул реквеста с наименованием РВП: (Работа в прогрессе) если работа не выполнена.
+* Не заливать в мастер.
+* Одна проблема - один пул реквест - одна ветка.
+* Пул реквест: #<_issue_id_> имя пул реквеста.
+* Все пул реквесты должны иметь комментарии.
 
 ### Developers
-1. [Yaroslav Gosudarkin](https://github.com/DarkFlink) - alorithms
-2. [Gavrilov Andrew](https://github.com/AndrewGavril) - GUI
-3. [Gizzatov Amir](https://github.com/Gizzatovamir) - UnitTests
+1. [Yaroslav Gosudarkin](https://github.com/DarkFlink) - ответственный за алгоритмы.
+2. [Gavrilov Andrew](https://github.com/AndrewGavril) - ответственный за графический интерфейс.
+3. [Gizzatov Amir](https://github.com/Gizzatovamir) - ответственный за юнит тестирование.
