@@ -3,7 +3,7 @@ import VKClient.VKUser;
 
 import java.util.ArrayList;
 
-public class Main {
+public class ApplicationMain {
 
     private static final String[]  requestArgs = {"photo50", "education"};
 
