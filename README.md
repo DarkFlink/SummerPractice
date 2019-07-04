@@ -35,6 +35,6 @@ Here is instructions for launching and using VKFriends
 * All PRs need to follow with comments
 
 ### Developers
-1. [Yaroslav Gosudarkin](https://github.com/DarkFlink)
-2. [Gavrilov Andrew](https://github.com/AndrewGavril)
-3. [Gizzatov Amir](https://github.com/Gizzatovamir)
+1. [Yaroslav Gosudarkin](https://github.com/DarkFlink) - alorithms
+2. [Gavrilov Andrew](https://github.com/AndrewGavril) - GUI
+3. [Gizzatov Amir](https://github.com/Gizzatovamir) - UnitTests
