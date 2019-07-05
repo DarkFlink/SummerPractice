@@ -4,25 +4,34 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
-
 public class VKClientTest {
-    private static final String[]  requestArgs = {"photo50", "education"};
+    private static final String[] requestArgs = {"photo50", "education"};
+
     @Test
-    public void parseFriendsJson(){
-        int userID = 543334830;
+    public void parseFriendsJson() {
+        int userID = 177754919;
         VKClient user = new VKClient();
         String response = user.getUserFriends(userID, requestArgs);
-        ArrayList<VKUser> list;
+        ArrayList<VKUser> list = new ArrayList<>();
         ArrayList<VKUser> testList = new ArrayList<>();
-        testList.add(new VKUser(123,"Amir","Gizzatov"));
-        list = user.parseFriendsJson(response);
-        Test(list,testList);
-        /*if(list != null)
-            for (VKUser el : list)
-                System.out.println(el.toString());
-*/
 
+        testList.add(new VKUser(86251509, "Malika", "Isengeldinova"));
+        testList.add(new VKUser(86251509, "Malika", "Isengeldinova"));
+        testList.add(new VKUser(255335617, "Dana", "Murtazina"));
+        list = user.parseFriendsJson(response);
+        for(int i = 0; i < list.size();i++ ){
+            System.out.print(list.get(i).toString());
+            System.out.print(" - ");
+            System.out.print(testList.get(i).toString());
+            System.out.print(" - ");
+            if(list.get(i).isEquals(testList.get(i))){
+                System.out.println("equals");
+            }
+            else{
+                System.out.println("not equals");
+                return;
+            }
+        }
     }
 
 
@@ -30,15 +39,13 @@ public class VKClientTest {
     public void getUserFriends() {
 
     }
-    public void Test(ArrayList<VKUser> first,ArrayList<VKUser> second) {
-        try {
-            assertEquals(first, second);
-            System.out.println("The lists are equal");
-        }
-        catch(Throwable e){
-            System.out.println("The lists are not equal");
 
-        }
+    public void Test(Object first, Object second) {
+        if(first.equals(second))
+            System.out.println("equals");
+        else
+            System.out.println("not equals");
     }
 
 }
+

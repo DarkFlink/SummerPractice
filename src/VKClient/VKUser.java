@@ -1,5 +1,7 @@
 package VKClient;
 
+import java.util.ArrayList;
+
 public class VKUser {
     public int userId;
     public String firstName;
@@ -27,4 +29,13 @@ public class VKUser {
     public String toString() {
         return userId + " " + firstName + " " + lastName;
     }
+
+    public boolean isEquals(Object obj){
+        VKUser tmp = (VKUser) obj;
+        if(this.firstName.equals(tmp.firstName)){
+            return this.userId == tmp.userId;
+        }
+        return false;
+    }
+
 }
