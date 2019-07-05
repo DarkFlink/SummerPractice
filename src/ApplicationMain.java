@@ -12,7 +12,7 @@ public class ApplicationMain {
         VKClient vk = new VKClient();
 
         // id of user
-        int userID = 1411555542;
+        int userID = 543334830;
 
         // get json
         String response = vk.getUserFriends(userID, requestArgs);
