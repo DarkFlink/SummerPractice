@@ -54,7 +54,7 @@ VKFriends - GUI приложение, написанное на Java, позво
     * Строить минимальное/максимальное остовное дерево на основе базового графа.
  ### UML
  
- ![](https://github.com/DarkFlink/VKFriends/blob/6efd326edf039de5aea83be09709a09e8995eaa0/docs/Images/Untitled%20Diagram.jpg)
+ ![](https://github.com/DarkFlink/VKFriends/blob/f2d681c8df40a73b3416f5ffa224fa0f7d1096bf/docs/Images/UML.jpg)
     
     
 ### For contributors
