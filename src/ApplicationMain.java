@@ -1,6 +1,6 @@
 import VKClient.VKClient;
 import VKClient.VKUser;
-
+import GUI.*;
 import java.util.ArrayList;
 
 public class ApplicationMain {
@@ -10,7 +10,7 @@ public class ApplicationMain {
     private static final String orderFriends = "name";
 
     public static void main(String[] args) {
-
+        new MainWindow();
         VKClient vk = new VKClient();
         // id of user
 
