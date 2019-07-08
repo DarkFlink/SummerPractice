@@ -54,6 +54,9 @@ https://github.com/DarkFlink/VKFriends/wiki/Using-the-unit-tests
     * Выводить некоторую информацию об аккаунте по нажатию на вершину.
     
     * Строить минимальное/максимальное остовное дерево на основе базового графа.
+ ### UML
+ 
+ ![](https://github.com/DarkFlink/VKFriends/blob/f2d681c8df40a73b3416f5ffa224fa0f7d1096bf/docs/Images/UML.jpg)
     
     
 ### For contributors
