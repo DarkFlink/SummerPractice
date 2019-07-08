@@ -10,7 +10,7 @@ import com.google.gson.*;
 
 public class VKClient {
 
-    private final String accessVkApiToken = "<key of app>";
+    private final String accessVkApiToken = "0c91fdfc0c91fdfc0c91fdfc3e0cfa8e5100c910c91fdfc518a61b257703bf5b0589264";
     private final String versionVkApi = "5.101";
     private final String beginVkApi = "https://api.vk.com/method/";
     private final String endVkApi = "&access_token=" + accessVkApiToken + "&v=" + versionVkApi;
@@ -50,10 +50,40 @@ public class VKClient {
         return null;
     }
 
-    public String getUserFriends(int userId, String[] args)
+    public VKUser getUser(int userId, String[] args)
+    {
+        String sb = createGetRequest("users.get?user_ids=", userId,null, args);
+        String request = getRequest(sb);
+
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jo = (JsonObject)jsonParser.parse(request);
+
+        if (jo.get("error") != null)
+        {
+            System.out.println("Error code: " + jo.get("error").getAsJsonObject().get("error_code").getAsInt()
+                    + "\ndescription: " +
+                    jo.get("error").getAsJsonObject().get("error_msg").getAsString());
+            return null;
+        }
+
+        JsonObject response = jo.get("response").getAsJsonArray().get(0).getAsJsonObject();
+
+        return new VKUser(response.get("id").getAsInt(),
+                response.get("first_name").getAsString(),
+                response.get("last_name").getAsString());
+    }
+
+    public String getUserFriends(int userId,  String order, String[] args)
+    {
+        return getRequest(createGetRequest("friends.get?user_id=", userId, order, args));
+    }
+
+    private String createGetRequest(String method, int id, String order, String[] args)
     {
         StringBuilder sb = new StringBuilder();
-        sb.append(beginVkApi + "friends.get?user_id=" + userId);
+        sb.append(beginVkApi + method + id);
+        if (order != null)
+            sb.append("&order=" + order);
         if(args != null) {
             sb.append("&fields=");
             for (String field : args)
@@ -62,8 +92,7 @@ public class VKClient {
         }
         sb.append(endVkApi);
 
-
-        return getRequest(sb.toString());
+        return sb.toString();
     }
 
     private String getRequest(String url)
