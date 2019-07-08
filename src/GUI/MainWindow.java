@@ -2,37 +2,23 @@ package GUI;
 
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.*;
 
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.mxGraphOutline;
 import com.mxgraph.view.mxGraph;
 
-public class Graph extends JFrame{
+public class MainWindow extends JFrame{
     private JPanel buttonBar;
     private String[] l = {"1","2"};
     private JPanel LeftPanel;
     private mxGraph graph;
     private JPanel toolBar;
-
+    private Object parent;
     protected mxGraphComponent makeGraph(){
         graph = new mxGraph();
-        Object parent = graph.getDefaultParent();
-        graph.getModel().beginUpdate();
-        try {
-            Object v1 = graph.insertVertex(parent, null, "node1", 100, 100, 80, 30);
-            Object v2 = graph.insertVertex(parent, null, "node2", 1000, 100, 80, 30);
-            Object v3 = graph.insertVertex(parent, null, "node3", 100, 1000, 80, 30);
+        parent = graph.getDefaultParent();
 
-            graph.insertEdge(parent, null, "Edge", v1, v2);
-            graph.insertEdge(parent, null, "Edge", v2, v3);
-
-        } finally {
-            graph.getModel().endUpdate();
-        }
         final mxGraphComponent graphComponent = new mxGraphComponent(graph);
         return graphComponent;
     }
@@ -45,17 +31,15 @@ public class Graph extends JFrame{
 
         buttonBar = new JPanel();
         buttonBar.setLayout(new FlowLayout());
-        JButton btResetOutline = new JButton( "Reset Outline");
+        JButton DeleteAll = new JButton( "Delete all");
         JButton AddButton = new JButton("Add user");
-        btResetOutline.addActionListener(new ActionListener() {
+        JButton DelButton = new JButton("Delete user");
+        JButton RefrButton = new JButton("Refresh graph");
 
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                graphComponent.getGraphControl().scrollRectToVisible(new Rectangle(0,0,0,0));
-            }
-        });
-        buttonBar.add( btResetOutline);
+        buttonBar.add(DeleteAll);
+        buttonBar.add(RefrButton);
         buttonBar.add(AddButton);
+        buttonBar.add(DelButton);
         buttonBar.setSize(Toolkit.getDefaultToolkit().getScreenSize().width,400);
 
 
@@ -66,20 +50,27 @@ public class Graph extends JFrame{
 
     protected void makeLeftPane(mxGraphComponent graphComponent){
         LeftPanel = new JPanel();
+        JPanel panelForList = new JPanel();
+        panelForList.setLayout(new BoxLayout(panelForList,BoxLayout.Y_AXIS));
         JList<String> list= new JList<String>(l);
         list.setFixedCellWidth(300);
         mxGraphOutline graphOutline = new mxGraphOutline(graphComponent);
         graphOutline.setPreferredSize(new Dimension(300,300));
-        LeftPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        JTextField InputField = new JTextField();
+        InputField.setColumns(20);
+
+        panelForList.add(InputField);
+        panelForList.add(list);
+
         LeftPanel.setLayout(new BorderLayout());
         LeftPanel.add( graphOutline, BorderLayout.PAGE_END);
-        LeftPanel.add(list, BorderLayout.LINE_START);
+        LeftPanel.add(panelForList, BorderLayout.PAGE_START);
         getContentPane().add(LeftPanel,BorderLayout.WEST);
 
     }
 
 
-    public Graph() {
+    public MainWindow() {
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         }

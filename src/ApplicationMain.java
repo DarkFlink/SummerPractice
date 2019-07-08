@@ -8,7 +8,7 @@ public class ApplicationMain {
     private static final String[]  requestArgs = {"photo50", "education"};
 
     public static void main(String[] args) {
-        new Graph();
+        new MainWindow();
         VKClient vk = new VKClient();
 
         // id of user
