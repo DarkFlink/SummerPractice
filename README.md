@@ -32,6 +32,7 @@ VKFriends - GUI приложение, написанное на Java, позво
 
 ### Tests
 Инструкции по тестированию
+
 https://github.com/DarkFlink/VKFriends/wiki/Using-the-unit-tests
 
 ### Usage
