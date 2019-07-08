@@ -8,12 +8,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 public class VKClientTest {
     private static final String[] requestArgs = {"photo50", "education"};
-
+    private static final String orderFriends = "name";
+    private int userID = 206043986;
     @Test
         public void parseFriendsJson() {
-        int userID = 206043986;
         VKClient user = new VKClient();
-        String response = user.getUserFriends(userID, requestArgs);
+        String response = user.getUserFriends(userID, orderFriends, requestArgs);
         ArrayList<VKUser> list = new ArrayList<>();
         list = user.parseFriendsJson(response);
         try {
@@ -43,6 +43,21 @@ public class VKClientTest {
             }
         }catch(Throwable e){
             System.out.println("ERROR" + e);
+        }
+    }
+
+    @Test
+    public void getUser() {
+        VKClient user = new VKClient();
+        userID = 206043986;
+        String response = user.getUserFriends(userID, orderFriends, requestArgs);
+        ArrayList<VKUser> list;
+        list = user.parseFriendsJson(response);
+        for(int i = 0; i< list.size();i++){
+            VKUser tmp = list.get(i);
+            System.out.println(user.getUser(tmp.userId,null));
+
+
         }
     }
 }
