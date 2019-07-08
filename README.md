@@ -52,6 +52,9 @@ VKFriends - GUI приложение, написанное на Java, позво
     * Выводить некоторую информацию об аккаунте по нажатию на вершину.
     
     * Строить минимальное/максимальное остовное дерево на основе базового графа.
+ ### UML
+ 
+ ![](https://github.com/DarkFlink/VKFriends/blob/6efd326edf039de5aea83be09709a09e8995eaa0/docs/Images/Untitled%20Diagram.jpg)
     
     
 ### For contributors
