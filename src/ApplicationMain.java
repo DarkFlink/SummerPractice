@@ -1,6 +1,6 @@
 import VKClient.VKClient;
 import VKClient.VKUser;
-
+import GUI.*;
 import java.util.ArrayList;
 
 public class ApplicationMain {
@@ -8,7 +8,7 @@ public class ApplicationMain {
     private static final String[]  requestArgs = {"photo50", "education"};
 
     public static void main(String[] args) {
-
+        new Graph();
         VKClient vk = new VKClient();
 
         // id of user

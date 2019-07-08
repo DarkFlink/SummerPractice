@@ -10,5 +10,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="com.google.code.gson:gson:2.8.1" level="project" />
     <orderEntry type="library" name="com.bluecatcode.junit:junit-4.10-extended:1.0.4" level="project" />
+    <orderEntry type="library" name="com.github.vlsi.mxgraph:jgraphx:4.0.0" level="project" />
   </component>
 </module>
