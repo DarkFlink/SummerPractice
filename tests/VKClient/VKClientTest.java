@@ -10,15 +10,17 @@ public class VKClientTest {
     private static final String[] requestArgs = {"photo50", "education"};
 
     @Test
-    public void parseFriendsJson() {
+        public void parseFriendsJson() {
         int userID = 206043986;
         VKClient user = new VKClient();
         String response = user.getUserFriends(userID, requestArgs);
         ArrayList<VKUser> list = new ArrayList<>();
         list = user.parseFriendsJson(response);
         try {
-            File test = new File("test1.txt");
-            BufferedReader br = new BufferedReader(new FileReader("test1.txt"));
+            File test = new File(new File("").getAbsolutePath()  + "\\tests\\VKClient\\test1.txt");
+            BufferedReader br;
+            FileReader fileReader = new FileReader(test);
+            br = new BufferedReader(fileReader);
             if (!test.exists()) {
                 System.out.println("File doesn't exists");
                 return;
