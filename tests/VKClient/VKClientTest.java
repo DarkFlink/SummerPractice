@@ -33,6 +33,10 @@ public class VKClientTest {
                 if(list.get(j).toString().equals(line)){
                     System.out.println("equals");
                 }
+                else{
+                    System.out.println("not equals");
+                    return;
+                }
                 ++j;
             }
         }catch(Throwable e){
