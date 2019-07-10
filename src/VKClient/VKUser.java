@@ -8,7 +8,6 @@ public class VKUser {
     public int userId;
     public String firstName;
     public String lastName;
-    private ListIterator<VKUser> iter;
     /*public boolean is_closed;
     public boolean can_access_closed;
     public int sex;
