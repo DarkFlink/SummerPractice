@@ -110,7 +110,6 @@ public class MainWindow extends JFrame{
         mList.setBackground(colorForTools);
         mxGraphOutline graphOutline = new mxGraphOutline(graphComponent);
         graphOutline.setPreferredSize(new Dimension(leftPanelWidth,leftPanelWidth));
-        //graphOutline.setBackground(colorForTools);
         InputField = new JTextField();
         InputField.setColumns(colNum);
         InputField.setBackground(colorForOther);
