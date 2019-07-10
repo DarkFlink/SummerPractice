@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Map;
 
 import com.google.gson.*;
 
@@ -12,7 +13,7 @@ public class VKClient {
 
     public static final String[] basicArgs = {"id", "first_name", "last_name", "deactivated", "is_closed"};
 
-    private static final String accessVkApiToken = "0c91fdfc0c91fdfc0c91fdfc3e0cfa8e5100c910c91fdfc518a61b257703bf5b0589264";
+    private static final String accessVkApiToken = "key";
     private static final String versionVkApi = "5.101";
     private static final String beginVkApi = "https://api.vk.com/method/";
     private static final String endVkApi = "&access_token=" + accessVkApiToken + "&v=" + versionVkApi;
@@ -52,6 +53,22 @@ public class VKClient {
         return null;
     }
 
+    public Map<int, int> getCommonFriends(int srcId, int[] targetIds)
+    {
+        var srcUser = getFriends(srcId, null, null);
+        Map<int, int> cmnFriends = new Map<int, int>();
+        for(var it : targetIds)
+        {
+            ArrayList<VKUser> list = getFriends(it, null, null);
+            int count = 0;
+            for(var i : list)
+                if(srcUser.contains(i))
+                    count++;
+            cmnFriends.put(it, count);
+        }
+        return cmnFriends;
+    }
+
     public VKUser getUser(int userId, String[] args)
     {
         String sb = createGetRequest("users.get?user_ids=", userId,null, args);
@@ -80,11 +97,17 @@ public class VKClient {
         return getRequest(createGetRequest("friends.get?user_id=", userId, order, args));
     }
 
+    public ArrayList<VKUser> getFriends( int userId, String order, String[] args )
+    {
+        String res = getUserFriends(userId, order, args);
+        return parseFriendsJson(res);
+    }
+
     private String createGetRequest(String method, int id, String order, String[] args)
     {
         StringBuilder sb = new StringBuilder();
         sb.append(beginVkApi + method + id);
-        if (order != null)
+        if(order != null)
             sb.append("&order=" + order);
         if(args != null) {
             sb.append("&fields=");
@@ -114,5 +137,4 @@ public class VKClient {
         }
         return sb.toString();
     }
-
 }

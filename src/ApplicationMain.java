@@ -11,11 +11,10 @@ public class ApplicationMain {
 
     public static void main(String[] args) {
         new MainWindow();
-        /*
-
+/*
         VKClient vk = new VKClient();
 
-        String userID = "179878269";
+        int userID = 179878269;
 
         // get json
         String response = vk.getUserFriends(userID, orderFriends, requestArgs);
@@ -23,6 +22,8 @@ public class ApplicationMain {
 
         //информация о человеке
         System.out.println(vk.getUser(userID, null));
+
+
 
         list = vk.parseFriendsJson(response);// json -> ArrayList
         // this only for result
@@ -32,6 +33,6 @@ public class ApplicationMain {
                     System.out.println(el.toString());
             else
                 System.out.println("Empty list");
-        */
+*/
     }
 }
