@@ -17,7 +17,7 @@ public class VKClientTest {
         ArrayList<VKUser> list = new ArrayList<>();
         list = user.parseFriendsJson(response);
         try {
-            File test = new File(new File("").getAbsolutePath()  + "\\tests\\VKClient\\test1.txt");
+            File test = new File(new File("").getAbsolutePath()  + "\\tests\\VKClient\\DataSets\\test1.txt");
             BufferedReader br;
             FileReader fileReader = new FileReader(test);
             br = new BufferedReader(fileReader);
@@ -58,6 +58,36 @@ public class VKClientTest {
             System.out.println(user.getUser(tmp.userId,null));
 
 
+        }
+    }
+
+    @Test
+    public void getCommonFriends() {
+        try {
+            userID = 206043986;
+            VKClient user = new VKClient();
+            File test = new File(new File("").getAbsolutePath()  + "\\tests\\VKClient\\DataSets\\test2.txt");
+            BufferedReader br;
+            FileReader fileReader = new FileReader(test);
+            br = new BufferedReader(fileReader);
+            ArrayList<String> id = new ArrayList<>();
+            String str;
+            while( (str = br.readLine()) != null){
+                id.add(str);
+                //id.add(br.readLine());
+                //System.out.println(br.readLine());
+            }
+            int[] target = new int[id.size()];
+            for(int i =0;i < id.size();i++) {
+                target[i] = Integer.parseInt(id.get(i));
+            }
+            ArrayList<int[]> common = user.getCommonFriends(userID, target);
+            for(int[] it : common){
+                System.out.println(user.getUser(it[0],null) + " - " + user.getUser(userID,null) + " in common: " + it[1]);
+            }
+        }
+        catch(Throwable e) {
+            System.out.println("ERROR: " + e);
         }
     }
 }
