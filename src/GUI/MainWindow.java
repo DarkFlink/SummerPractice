@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import javax.swing.*;
 
+
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.mxGraphOutline;
 import com.mxgraph.view.mxGraph;
@@ -16,11 +17,12 @@ import VKClient.VKUser;
 
 public class MainWindow extends JFrame{
     private final int leftPanelWidth = 300;
-
+    private final int colNum = 20;
     private JPanel toolBar;
     private JPanel buttonBar;
     private JPanel LeftPanel;
-
+    private final Color colorForTools = new Color(55,55,55);
+    private final Color colorForOther = new Color(200,200,200);
     private JList<String> mList;
     private JTextField InputField;
 
@@ -38,15 +40,22 @@ public class MainWindow extends JFrame{
         return graphComponent;
     }
 
-    protected void makeToolbar(mxGraphComponent graphComponent){
+    protected void makeToolbar(){
         toolBar = new JPanel();
         getContentPane().add(LeftPanel,BorderLayout.WEST);
         toolBar.setLayout( new BorderLayout());
+        toolBar.setBackground(colorForTools);
 
         buttonBar = new JPanel();
         buttonBar.setLayout(new FlowLayout());
-        JButton DeleteAll = new JButton( "Delete all");
-        JButton AddButton = new JButton("Add user");
+        buttonBar.setBackground(colorForTools);
+
+        ImageIcon resImg = new ImageIcon(System.getProperty("user.dir")+"/assets/Icons/graphreset.png");
+        JButton DeleteAll = new JButton( "",resImg);
+        DeleteAll.setBackground(colorForTools);
+        ImageIcon addImg = new ImageIcon(System.getProperty("user.dir")+"/assets/Icons/add.png");
+        JButton AddButton = new JButton("", addImg);
+        AddButton.setBackground(colorForTools);
         AddButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -56,7 +65,9 @@ public class MainWindow extends JFrame{
                 // TODO: add vertex and edges
             }
         });
-        JButton DelButton = new JButton("Delete user");
+        ImageIcon delImg = new ImageIcon(System.getProperty("user.dir")+"/assets/Icons/erase.png");
+        JButton DelButton = new JButton("",delImg);
+        DelButton.setBackground(colorForTools);
         DelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -72,8 +83,10 @@ public class MainWindow extends JFrame{
                 // TODO: remove vertex and edges
             }
         });
-
-        JButton RefrButton = new JButton("Refresh graph");
+        ImageIcon refrImg = new ImageIcon(System.getProperty("user.dir")+"/assets/Icons/graphrefresh.png");
+        JButton RefrButton = new JButton("",refrImg);
+        RefrButton.setBackground(colorForTools);
+        RefrButton.setSize(new Dimension(1000,1000));
 
         buttonBar.add(RefrButton);
         buttonBar.add(AddButton);
@@ -87,15 +100,20 @@ public class MainWindow extends JFrame{
 
     protected void makeLeftPane(mxGraphComponent graphComponent){
         LeftPanel = new JPanel();
+        LeftPanel.setBackground(colorForTools);
         JPanel panelForList = new JPanel();
         panelForList.setLayout(new BoxLayout(panelForList,BoxLayout.Y_AXIS));
+        panelForList.setBackground(colorForTools);
 
         mList = new JList<>();
         mList.setFixedCellWidth(leftPanelWidth);
+        mList.setBackground(colorForTools);
         mxGraphOutline graphOutline = new mxGraphOutline(graphComponent);
         graphOutline.setPreferredSize(new Dimension(leftPanelWidth,leftPanelWidth));
+        //graphOutline.setBackground(colorForTools);
         InputField = new JTextField();
-        InputField.setColumns(20);
+        InputField.setColumns(colNum);
+        InputField.setBackground(colorForOther);
 
         panelForList.add(InputField);
         panelForList.add(mList);
@@ -122,12 +140,13 @@ public class MainWindow extends JFrame{
         setSize(Toolkit.getDefaultToolkit().getScreenSize());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setUpVKClient();
-
         mxGraphComponent graphComponent= makeGraph();
+        graphComponent.getViewport().setOpaque(true);
+        graphComponent.getViewport().setBackground(colorForOther);
+        getContentPane().setBackground(colorForTools);
         getContentPane().add(graphComponent, BorderLayout.CENTER);
-
         makeLeftPane(graphComponent);
-        makeToolbar(graphComponent);
+        makeToolbar();
 
         setVisible(true);
     }
