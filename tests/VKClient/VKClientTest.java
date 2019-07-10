@@ -54,9 +54,7 @@ public class VKClientTest {
         list = user.parseFriendsJson(response);
         for(int i = 0; i< list.size();i++){
             VKUser tmp = list.get(i);
-            System.out.println(user.getUser(tmp.userId,null));
-
-
+            //System.out.println(user.getUser(tmp.userId,null));
         }
     }
 }
