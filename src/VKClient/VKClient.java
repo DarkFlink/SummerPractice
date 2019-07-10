@@ -53,18 +53,19 @@ public class VKClient {
         return null;
     }
 
-    public Map<int, int> getCommonFriends(int srcId, int[] targetIds)
+    public ArrayList<int[]> getCommonFriends(int srcId, int[] targetIds)
     {
-        var srcUser = getFriends(srcId, null, null);
-        Map<int, int> cmnFriends = new Map<int, int>();
-        for(var it : targetIds)
+        ArrayList<VKUser> srcUser = getFriends(srcId, null, null);
+        ArrayList<int[]> cmnFriends = new ArrayList<int[]>();
+        for(int it : targetIds)
         {
             ArrayList<VKUser> list = getFriends(it, null, null);
             int count = 0;
-            for(var i : list)
+            for(VKUser i : list)
                 if(srcUser.contains(i))
                     count++;
-            cmnFriends.put(it, count);
+            int[] ids = {it, count};
+            cmnFriends.add(ids);
         }
         return cmnFriends;
     }
