@@ -3,15 +3,15 @@ import VKClient.VKUser;
 import GUI.*;
 import java.util.ArrayList;
 
-public class ApplicationMain {
-
-
+public class ApplicationMain
+{
     private static final String[]  requestArgs = {"photo50", "education"};
-    private static final String orderFriends = "name";
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         new MainWindow();
-/*
+
+        /*
         VKClient vk = new VKClient();
 
         int userID = 179878269;
@@ -22,8 +22,6 @@ public class ApplicationMain {
 
         //информация о человеке
         System.out.println(vk.getUser(userID, null));
-
-
 
         list = vk.parseFriendsJson(response);// json -> ArrayList
         // this only for result

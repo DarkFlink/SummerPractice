@@ -31,7 +31,6 @@ public class VKClient {
                 return null;
             }
 
-
             JsonArray jsonArr = jo.get("response").getAsJsonObject().getAsJsonArray("items");
             ArrayList<VKUser> list = new ArrayList<>();
 
@@ -55,11 +54,11 @@ public class VKClient {
 
     public ArrayList<int[]> getCommonFriends(int srcId, int[] targetIds)
     {
-        ArrayList<VKUser> srcUser = getFriends(srcId, null, null);
+        ArrayList<VKUser> srcUser = getFriends(srcId, basicArgs);
         ArrayList<int[]> cmnFriends = new ArrayList<int[]>();
         for(int it : targetIds)
         {
-            ArrayList<VKUser> list = getFriends(it, null, null);
+            ArrayList<VKUser> list = getFriends(it,  basicArgs);
             int count = 0;
             for(VKUser i : list)
                 if(srcUser.contains(i))
@@ -72,7 +71,7 @@ public class VKClient {
 
     public VKUser getUser(int userId, String[] args)
     {
-        String sb = createGetRequest("users.get?user_ids=", userId,null, args);
+        String sb = createGetRequest("users.get?user_ids=", userId, args);
         String request = getRequest(sb);
 
         JsonParser jsonParser = new JsonParser();
@@ -93,23 +92,21 @@ public class VKClient {
                 response.get("last_name").getAsString());
     }
 
-    public String getUserFriends(int userId,  String order, String[] args)
+    public String getUserFriends(int userId, String[] args)
     {
-        return getRequest(createGetRequest("friends.get?user_id=", userId, order, args));
+        return getRequest(createGetRequest("friends.get?user_id=", userId, args));
     }
 
-    public ArrayList<VKUser> getFriends( int userId, String order, String[] args )
+    public ArrayList<VKUser> getFriends( int userId, String[] args )
     {
-        String res = getUserFriends(userId, order, args);
+        String res = getUserFriends(userId, args);
         return parseFriendsJson(res);
     }
 
-    private String createGetRequest(String method, int id, String order, String[] args)
+    private String createGetRequest(String method, int id, String[] args)
     {
         StringBuilder sb = new StringBuilder();
         sb.append(beginVkApi + method + id);
-        if(order != null)
-            sb.append("&order=" + order);
         if(args != null) {
             sb.append("&fields=");
             for (String field : args)
