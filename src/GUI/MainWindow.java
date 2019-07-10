@@ -3,14 +3,13 @@ package GUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
+import java.util.*;
 import javax.swing.*;
 
-
-import com.mxgraph.swing.mxGraphComponent;
-import com.mxgraph.swing.mxGraphOutline;
-import com.mxgraph.view.mxGraph;
+import com.mxgraph.layout.*;
+import com.mxgraph.swing.*;
+import com.mxgraph.view.*;
+import com.mxgraph.model.*;
 
 import VKClient.VKClient;
 import VKClient.VKUser;
@@ -24,19 +23,21 @@ public class MainWindow extends JFrame{
     private final Color colorForTools = new Color(55,55,55);
     private final Color colorForOther = new Color(200,200,200);
     private JList<String> mList;
+    private DefaultListModel<VKUser> listModel;
     private JTextField InputField;
 
     private mxGraph graph;
-    private Object parent;
+    private mxIGraphLayout layout;
 
     private VKClient mClient;
     private ArrayList<VKUser> mUsers;
-
+    Integer count = 2;
     protected mxGraphComponent makeGraph(){
         graph = new mxGraph();
-        parent = graph.getDefaultParent();
-
-        final mxGraphComponent graphComponent = new mxGraphComponent(graph);
+        graph.setCellsMovable(false);
+        graph.setCellsResizable(false);
+        layout = new mxOrganicLayout(graph);
+        mxGraphComponent graphComponent = new mxGraphComponent(graph);
         return graphComponent;
     }
 
@@ -59,9 +60,56 @@ public class MainWindow extends JFrame{
         AddButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                int id = Integer.parseInt(InputField.getText());
-                mUsers.add( mClient.getUser(id, null) );
-                mList.setListData(VKUser.arrayToStrings(mUsers));
+                String userId = InputField.getText();
+                VKUser user=null;
+                try {
+                    user = mClient.getUser(userId, null);
+                }catch (Exception e){
+                    getWarningMassage(((Integer)listModel.size()).toString());
+                    return;
+                }
+                if(user == null) {
+                    getWarningMassage(((Integer)listModel.size()).toString());
+                    return;
+                }
+                int[] arrId= new int[listModel.size()];
+                for(int i=0;i<listModel.size();i++){
+                    if(user.equals(listModel.get(i))) {
+                        getWarningMassage("");
+                        return;
+                    }
+                    arrId[i]=listModel.get(i).userId;
+
+                }
+                ArrayList<Integer> listEdges = mClient.getCommonFriends(user.userId,arrId);
+                //mList.setListData(VKUser.arrayToStrings(mUsers));
+                graph.getModel().beginUpdate();
+                graph.setCellsMovable(true);
+                try {
+                    Object[] arr=graph.getChildVertices(graph.getDefaultParent());
+                    Object vert1 = graph.insertVertex(graph.getDefaultParent(),((Integer)(user.userId)).toString(),user.firstName+" "+user.lastName,
+                            110,100,50,50,
+                            "verticalLabelPosition=bottom;fontColor=black");
+                    //if(arr.length!=0)
+                    //graph.insertEdge(graph.getDefaultParent(),null,"",vert1,arr[0]);
+                    for(int i=0;i<listEdges.size();i++){
+                        if(listEdges.get(i)==0)
+                            continue;
+                        for (Object c: arr) {
+                            mxCell vert2=(mxCell)c;
+                            if(Integer.parseInt(vert2.getId())==listModel.get(i).userId) {
+                                graph.insertEdge(graph.getDefaultParent(),null,"",vert1,vert2);
+                            }
+                        }
+                    }
+                }
+                finally {
+                    listModel.addElement(user);
+                    layout.execute(graph.getDefaultParent());
+                    graph.setCellsMovable(false);
+                    graph.getModel().endUpdate();
+                }
+                count++;
                 // TODO: add vertex and edges
             }
         });
@@ -71,15 +119,13 @@ public class MainWindow extends JFrame{
         DelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                int id = Integer.parseInt(InputField.getText());
-                VKUser tmp = new VKUser(id, "", "");
-                try {
-                    VKUser.findAndRemove(mUsers, id);
-                } catch (NoSuchElementException e)
-                {
-                    System.out.println("Exepc: " + e.getMessage());
-                }
-                mList.setListData(VKUser.arrayToStrings(mUsers));
+                String userId = InputField.getText();
+                //for (int i=0;i<listModel.){
+                  //  if(userId.equals(user.userId))
+                    //    delVertex(user.userId);
+                //}
+                //listModel.removeElement("aaa");
+                count--;
                 // TODO: remove vertex and edges
             }
         });
@@ -101,11 +147,10 @@ public class MainWindow extends JFrame{
     protected void makeLeftPane(mxGraphComponent graphComponent){
         LeftPanel = new JPanel();
         LeftPanel.setBackground(colorForTools);
-        JPanel panelForList = new JPanel();
-        panelForList.setLayout(new BoxLayout(panelForList,BoxLayout.Y_AXIS));
-        panelForList.setBackground(colorForTools);
+        LeftPanel.setLayout(new BorderLayout());
 
-        mList = new JList<>();
+        listModel=new DefaultListModel<>();
+        mList = new JList(listModel);
         mList.setFixedCellWidth(leftPanelWidth);
         mList.setBackground(colorForTools);
         mxGraphOutline graphOutline = new mxGraphOutline(graphComponent);
@@ -114,10 +159,12 @@ public class MainWindow extends JFrame{
         InputField.setColumns(colNum);
         InputField.setBackground(colorForOther);
 
+        JPanel panelForList = new JPanel();
+        panelForList.setLayout(new BoxLayout(panelForList,BoxLayout.Y_AXIS));
+        panelForList.setBackground(colorForTools);
         panelForList.add(InputField);
         panelForList.add(mList);
 
-        LeftPanel.setLayout(new BorderLayout());
         LeftPanel.add( graphOutline, BorderLayout.PAGE_END);
         LeftPanel.add(panelForList, BorderLayout.PAGE_START);
         getContentPane().add(LeftPanel,BorderLayout.WEST);
@@ -127,6 +174,34 @@ public class MainWindow extends JFrame{
     {
         mClient = new VKClient();
         mUsers = new ArrayList<VKUser>();
+    }
+    private void getWarningMassage(String error){
+        JOptionPane.showMessageDialog(null,"Error");
+    }
+
+    private void showUserInfo(VKUser user){
+
+    }
+
+    private void delVertex(String id){
+        graph.getModel().beginUpdate();
+        graph.setCellsMovable(true);
+        try {
+            Object[] arr=graph.getChildVertices(graph.getDefaultParent());
+            for (Object c: arr) {
+                mxCell vertex=(mxCell)c;
+                if(id.equals(vertex.getId())) {
+                    graph.removeCells(graph.getEdges(vertex));
+                    graph.getModel().remove(vertex);
+                }
+            }
+
+        }
+        finally {
+            layout.execute(graph.getDefaultParent());
+            graph.setCellsMovable(false);
+            graph.getModel().endUpdate();
+        }
     }
 
     public MainWindow() {

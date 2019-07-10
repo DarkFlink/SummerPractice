@@ -53,10 +53,10 @@ public class VKClient {
         return null;
     }
 
-    public ArrayList<int[]> getCommonFriends(int srcId, int[] targetIds)
+    public ArrayList<Integer> getCommonFriends(int srcId, int[] targetIds)
     {
         ArrayList<VKUser> srcUser = getFriends(srcId, basicArgs);
-        ArrayList<int[]> cmnFriends = new ArrayList<int[]>();
+        ArrayList<Integer> cmnFriends = new ArrayList<Integer>();
         for(int it : targetIds)
         {
             ArrayList<VKUser> list = getFriends(it,  basicArgs);
@@ -64,8 +64,8 @@ public class VKClient {
             for(VKUser i : list)
                 if(srcUser.contains(i))
                     count++;
-            int[] ids = {it, count};
-            cmnFriends.add(ids);
+            int id = count;
+            cmnFriends.add(id);
         }
         return cmnFriends;
     }
@@ -87,6 +87,8 @@ public class VKClient {
                 id = getUserId(userId);
             }
         }
+        else
+            id = Integer.parseInt(userId);
 
 
         String sb = createGetRequest("users.get?user_ids=", id, args);
