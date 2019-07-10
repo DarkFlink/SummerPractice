@@ -2,6 +2,7 @@ package VKClient;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.net.URL;
 import java.net.URLConnection;
@@ -13,7 +14,7 @@ public class VKClient {
 
     public static final String[] basicArgs = {"id", "first_name", "last_name", "deactivated", "is_closed"};
 
-    private static final String accessVkApiToken = "key";
+    private static final String accessVkApiToken = "0c91fdfc0c91fdfc0c91fdfc3e0cfa8e5100c910c91fdfc518a61b257703bf5b0589264";
     private static final String versionVkApi = "5.101";
     private static final String beginVkApi = "https://api.vk.com/method/";
     private static final String endVkApi = "&access_token=" + accessVkApiToken + "&v=" + versionVkApi;
@@ -69,9 +70,26 @@ public class VKClient {
         return cmnFriends;
     }
 
-    public VKUser getUser(int userId, String[] args)
+    public VKUser getUser(String userId, String[] args) throws InvalidParameterException
     {
-        String sb = createGetRequest("users.get?user_ids=", userId, args);
+        if(userId == null || userId.equals(""))
+        {
+            throw new InvalidParameterException("Invalid input, null or empty input.");
+        }
+        int id = -1;
+        if(userId.startsWith("https://vk.com/"))
+        {
+            try {
+                String str = userId.substring(15);
+                id = Integer.parseInt(str);
+            } catch (Exception e)
+            {
+                id = getUserId(userId);
+            }
+        }
+
+
+        String sb = createGetRequest("users.get?user_ids=", id, args);
         String request = getRequest(sb);
 
         JsonParser jsonParser = new JsonParser();
@@ -84,7 +102,7 @@ public class VKClient {
                     jo.get("error").getAsJsonObject().get("error_msg").getAsString());
             return null;
         }
-
+        System.out.println(request);
         JsonObject response = jo.get("response").getAsJsonArray().get(0).getAsJsonObject();
 
         return new VKUser(response.get("id").getAsInt(),
@@ -116,6 +134,15 @@ public class VKClient {
         sb.append(endVkApi);
 
         return sb.toString();
+    }
+
+    public int getUserId(String url)
+    {
+        String account = url.substring(15);
+        String response = getRequest(beginVkApi + "utils.resolveScreenName?screen_name=" + account + endVkApi);
+        JsonParser jsonParser = new JsonParser();
+        JsonObject obj = (JsonObject)jsonParser.parse(response);
+        return obj.get("response").getAsJsonObject().get("object_id").getAsInt();
     }
 
     private String getRequest(String url)

@@ -39,28 +39,4 @@ public class VKUser {
             return true;
         return false;
     }
-
-    public static String[] arrayToStrings(ArrayList<VKUser> list)
-    {
-        String[] result = new String[list.size()];
-        for(int i=0; i < list.size(); i++)
-            result[i] = list.get(i).toString();
-        return result;
-    }
-
-    public static void findAndRemove(ArrayList<VKUser> list, int id) throws NoSuchElementException
-    {
-        int i=0;
-        VKUser tmp = new VKUser( id, null, null );
-        for(ListIterator<VKUser> iter = list.listIterator(i); iter.hasNext(); iter = list.listIterator(i++) )
-        {
-            VKUser el = iter.next();
-            if (el.equals(tmp))
-            {
-                iter.remove();
-                return;
-            }
-        }
-        throw new NoSuchElementException("No such user with id: " + id);
-    }
 }
