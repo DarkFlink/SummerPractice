@@ -14,7 +14,7 @@ public class VKClient {
 
     public static final String[] basicArgs = {"id", "first_name", "last_name", "deactivated", "is_closed"};
 
-    private static final String accessVkApiToken = "0c91fdfc0c91fdfc0c91fdfc3e0cfa8e5100c910c91fdfc518a61b257703bf5b0589264";
+    private static final String accessVkApiToken = "key";
     private static final String versionVkApi = "5.101";
     private static final String beginVkApi = "https://api.vk.com/method/";
     private static final String endVkApi = "&access_token=" + accessVkApiToken + "&v=" + versionVkApi;
