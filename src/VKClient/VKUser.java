@@ -1,10 +1,5 @@
 package VKClient;
 
-import javax.print.DocFlavor;
-import java.util.ArrayList;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
-
 public class VKUser {
     public int userId;
     public String firstName;

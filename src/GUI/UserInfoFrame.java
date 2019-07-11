@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 
 import VKClient.VKUser;
 import com.mxgraph.model.mxCell;
@@ -16,7 +15,6 @@ public class UserInfoFrame extends JFrame{
     private DefaultListModel<VKUser> list;
     private String id;
     private final Color color = new Color(55,55,55);
-    private final Color textColor = new Color(200,200,200);
     private mxIGraphLayout layout;
 
     public UserInfoFrame(mxGraph mxGraph, mxIGraphLayout mlayout, DefaultListModel<VKUser> mlist, String user_id) {
@@ -54,11 +52,18 @@ public class UserInfoFrame extends JFrame{
         centrePanel.setBackground(color);
         add(centrePanel,BorderLayout.CENTER);
         getContentPane().setBackground(color);
-        JTextArea textField=new JTextArea("efwe");
+        VKUser user=new VKUser(0,null,null,null);
+        for(int i=0;i<list.size();i++){
+            if(list.get(i).userId==Integer.parseInt(user_id)) {
+                user = list.get(i);
+                break;
+            }
+        }
+
+        JTextArea textField=new JTextArea(user.getInfo());
         textField.setEnabled(false);
-        textField.setBackground(color);
-        textField.setForeground(textColor);
-        textField.setPreferredSize(new Dimension(300,300));
+        textField.setPreferredSize(new Dimension(400,200));
+        textField.setFont(new Font("Times New Roman",Font.BOLD,12));
         centrePanel.add(textField,BorderLayout.CENTER);
         setVisible(true);
     }
