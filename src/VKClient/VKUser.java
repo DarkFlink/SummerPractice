@@ -1,5 +1,6 @@
 package VKClient;
 
+import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
@@ -73,5 +74,18 @@ public class VKUser {
             default:
                 return "superunknown";
         }
+    }
+
+    public String getInfo()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID: " + String.valueOf(userId) + "\n");
+        sb.append("First Name: " + firstName + "\n");
+        sb.append("Last Name: " + lastName + "\n");
+        sb.append("Birth Date: " + bdate + "\n");
+        sb.append("Relations: " + getRelation() + "\n");
+        sb.append("Sex: " + getSex() + "\n");
+        sb.append("University: " + education + "\n");
+        return sb.toString();
     }
 }
