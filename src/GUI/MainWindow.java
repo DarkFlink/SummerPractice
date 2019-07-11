@@ -51,9 +51,32 @@ public class MainWindow extends JFrame{
         buttonBar.setLayout(new FlowLayout());
         buttonBar.setBackground(colorForTools);
 
+        ImageIcon delImg = new ImageIcon(System.getProperty("user.dir")+"/assets/Icons/erase.png");
+        JButton DelButton = new JButton("",delImg);
+
         ImageIcon resImg = new ImageIcon(System.getProperty("user.dir")+"/assets/Icons/graphreset.png");
         JButton DeleteAll = new JButton( "",resImg);
+
+        DelButton.setBackground(colorForTools);
+        DelButton.setEnabled(false);
+        DelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String userId = InputField.getText();
+                InputField.setText("");
+                delVertex(userId);
+                count--;
+                if(count == 2)
+                {
+                    DelButton.setEnabled(false);
+                    DeleteAll.setEnabled(false);
+                }
+                // TODO: remove vertex and edges
+            }
+        });
+
         DeleteAll.setBackground(colorForTools);
+        DeleteAll.setEnabled(false);
         DeleteAll.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -69,6 +92,9 @@ public class MainWindow extends JFrame{
                 }
                 graph.getModel().endUpdate();
                 listModel.removeAllElements();
+                DeleteAll.setEnabled(false);
+                DelButton.setEnabled(false);
+                count = 2;
             }
         });
 
@@ -129,6 +155,8 @@ public class MainWindow extends JFrame{
                     }
                 }
                 finally {
+                    DeleteAll.setEnabled(true);
+                    DelButton.setEnabled(true);
                     listModel.addElement(user);
                     layout.execute(graph.getDefaultParent());
                     graph.setCellsMovable(false);
@@ -138,28 +166,17 @@ public class MainWindow extends JFrame{
                 // TODO: add vertex and edges
             }
         });
-        ImageIcon delImg = new ImageIcon(System.getProperty("user.dir")+"/assets/Icons/erase.png");
-        JButton DelButton = new JButton("",delImg);
-        DelButton.setBackground(colorForTools);
-        DelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                String userId = InputField.getText();
-                InputField.setText("");
-                delVertex(userId);
-                count--;
-                // TODO: remove vertex and edges
-            }
-        });
-        ImageIcon refrImg = new ImageIcon(System.getProperty("user.dir")+"/assets/Icons/graphrefresh.png");
-        JButton RefrButton = new JButton("",refrImg);
-        RefrButton.setBackground(colorForTools);
-        RefrButton.setSize(new Dimension(1000,1000));
+
+        ImageIcon refrImg = new ImageIcon(System.getProperty("user.dir")+"/assets/Icons/kraskal.png");
+        JButton KraskalButton = new JButton("",refrImg);
+        KraskalButton.setBackground(colorForTools);
+        KraskalButton.setSize(new Dimension(1000,1000));
+        KraskalButton.setEnabled(false);
 
         buttonBar.add(AddButton);
         buttonBar.add(DelButton);
         buttonBar.add(DeleteAll);
-        //buttonBar.add(RefrButton);
+        buttonBar.add(KraskalButton);
         buttonBar.setSize(Toolkit.getDefaultToolkit().getScreenSize().width,400);
 
         toolBar.add( buttonBar, BorderLayout.WEST);
