@@ -12,9 +12,9 @@ import com.google.gson.*;
 
 public class VKClient {
 
-    public static final String[] basicArgs = {"id", "first_name", "last_name", "deactivated", "is_closed"};
+    public static final String[] basicArgs = {"id", "first_name", "last_name", "deactivated", "is_closed", "photo_50"};
 
-    private static final String accessVkApiToken = "key";
+    private static final String accessVkApiToken = "0c91fdfc0c91fdfc0c91fdfc3e0cfa8e5100c910c91fdfc518a61b257703bf5b0589264";
     private static final String versionVkApi = "5.101";
     private static final String beginVkApi = "https://api.vk.com/method/";
     private static final String endVkApi = "&access_token=" + accessVkApiToken + "&v=" + versionVkApi;
@@ -40,7 +40,8 @@ public class VKClient {
                 JsonObject tmp = obj.getAsJsonObject();
                 list.add( new VKUser( tmp.get("id").getAsInt(),
                         tmp.get("first_name").getAsString(),
-                        tmp.get("last_name").getAsString()));
+                        tmp.get("last_name").getAsString(),
+                        tmp.get("photo_50").getAsString()));
             }
 
             return list;
@@ -107,9 +108,13 @@ public class VKClient {
         System.out.println(request);
         JsonObject response = jo.get("response").getAsJsonArray().get(0).getAsJsonObject();
 
+        if(response.get("is_closed").getAsString().equals("true"))
+            throw new InvalidParameterException("Invalid input, private/deleted profile.");
+
         return new VKUser(response.get("id").getAsInt(),
                 response.get("first_name").getAsString(),
-                response.get("last_name").getAsString());
+                response.get("last_name").getAsString(),
+                response.get("photo_50").getAsString());
     }
 
     public String getUserFriends(int userId, String[] args)

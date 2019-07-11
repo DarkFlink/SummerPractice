@@ -54,6 +54,24 @@ public class MainWindow extends JFrame{
         ImageIcon resImg = new ImageIcon(System.getProperty("user.dir")+"/assets/Icons/graphreset.png");
         JButton DeleteAll = new JButton( "",resImg);
         DeleteAll.setBackground(colorForTools);
+        DeleteAll.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                graph.getModel().beginUpdate();
+                graph.setCellsMovable(true);
+                Object[] arr=graph.getChildVertices(graph.getDefaultParent());
+
+                for (Object c: arr)
+                {
+                    mxCell vertex=(mxCell)c;
+                    graph.removeCells(graph.getEdges(vertex));
+                    graph.getModel().remove(vertex);
+                }
+                graph.getModel().endUpdate();
+                listModel.removeAllElements();
+            }
+        });
+
         ImageIcon addImg = new ImageIcon(System.getProperty("user.dir")+"/assets/Icons/add.png");
         JButton AddButton = new JButton("", addImg);
         AddButton.setBackground(colorForTools);
@@ -61,21 +79,28 @@ public class MainWindow extends JFrame{
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 String userId = InputField.getText();
-                VKUser user=null;
+                InputField.setText("");
+                VKUser user = null;
+
+                if(userId.equals("1"))
+                {
+                    getWarningMassage("Magic Durov account." + ((Integer)listModel.size()).toString());
+                    return;
+                }
                 try {
-                    user = mClient.getUser(userId, null);
+                    user = mClient.getUser(userId, VKClient.basicArgs);
                 }catch (Exception e){
-                    getWarningMassage(((Integer)listModel.size()).toString());
+                    getWarningMassage(e.getMessage() + ((Integer)listModel.size()).toString());
                     return;
                 }
                 if(user == null) {
-                    getWarningMassage(((Integer)listModel.size()).toString());
+                    getWarningMassage( ((Integer)listModel.size()).toString());
                     return;
                 }
                 int[] arrId= new int[listModel.size()];
                 for(int i=0;i<listModel.size();i++){
                     if(user.equals(listModel.get(i))) {
-                        getWarningMassage("");
+                        getWarningMassage("dd");
                         return;
                     }
                     arrId[i]=listModel.get(i).userId;
@@ -89,7 +114,7 @@ public class MainWindow extends JFrame{
                     Object[] arr=graph.getChildVertices(graph.getDefaultParent());
                     Object vert1 = graph.insertVertex(graph.getDefaultParent(),((Integer)(user.userId)).toString(),user.firstName+" "+user.lastName,
                             110,100,50,50,
-                            "verticalLabelPosition=bottom;fontColor=black");
+                            "verticalLabelPosition=bottom;fontColor=black;shape=image;image="+user.photoUrl);
                     //if(arr.length!=0)
                     //graph.insertEdge(graph.getDefaultParent(),null,"",vert1,arr[0]);
                     for(int i=0;i<listEdges.size();i++){
@@ -98,7 +123,7 @@ public class MainWindow extends JFrame{
                         for (Object c: arr) {
                             mxCell vert2=(mxCell)c;
                             if(Integer.parseInt(vert2.getId())==listModel.get(i).userId) {
-                                graph.insertEdge(graph.getDefaultParent(),null,"",vert1,vert2);
+                                graph.insertEdge(graph.getDefaultParent(),null,listEdges.get(i).toString(), vert1,vert2);
                             }
                         }
                     }
@@ -120,11 +145,8 @@ public class MainWindow extends JFrame{
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 String userId = InputField.getText();
-                //for (int i=0;i<listModel.){
-                  //  if(userId.equals(user.userId))
-                    //    delVertex(user.userId);
-                //}
-                //listModel.removeElement("aaa");
+                InputField.setText("");
+                delVertex(userId);
                 count--;
                 // TODO: remove vertex and edges
             }
@@ -134,10 +156,10 @@ public class MainWindow extends JFrame{
         RefrButton.setBackground(colorForTools);
         RefrButton.setSize(new Dimension(1000,1000));
 
-        buttonBar.add(RefrButton);
         buttonBar.add(AddButton);
         buttonBar.add(DelButton);
         buttonBar.add(DeleteAll);
+        //buttonBar.add(RefrButton);
         buttonBar.setSize(Toolkit.getDefaultToolkit().getScreenSize().width,400);
 
         toolBar.add( buttonBar, BorderLayout.WEST);
@@ -176,11 +198,7 @@ public class MainWindow extends JFrame{
         mUsers = new ArrayList<VKUser>();
     }
     private void getWarningMassage(String error){
-        JOptionPane.showMessageDialog(null,"Error");
-    }
-
-    private void showUserInfo(VKUser user){
-
+        JOptionPane.showMessageDialog(null,error);
     }
 
     private void delVertex(String id){
@@ -199,9 +217,17 @@ public class MainWindow extends JFrame{
         }
         finally {
             layout.execute(graph.getDefaultParent());
+            delVtxFromList(id);
             graph.setCellsMovable(false);
             graph.getModel().endUpdate();
         }
+    }
+
+    public void delVtxFromList(String id)
+    {
+        for(int i=0; i<listModel.size(); i++)
+            if(listModel.get(i).userId == Integer.parseInt(id))
+                listModel.remove(i);
     }
 
     public MainWindow() {
