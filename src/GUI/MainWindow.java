@@ -3,13 +3,18 @@ package GUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.*;
 import javax.swing.*;
 
 import com.mxgraph.layout.*;
 import com.mxgraph.swing.*;
+import com.mxgraph.util.mxEventObject;
 import com.mxgraph.view.*;
 import com.mxgraph.model.*;
+import com.mxgraph.util.mxEvent;
+import com.mxgraph.util.mxEventSource;
 
 import VKClient.VKClient;
 import VKClient.VKUser;
@@ -34,10 +39,39 @@ public class MainWindow extends JFrame{
     Integer count = 2;
     protected mxGraphComponent makeGraph(){
         graph = new mxGraph();
-        graph.setCellsMovable(false);
         graph.setCellsResizable(false);
         layout = new mxOrganicLayout(graph);
         mxGraphComponent graphComponent = new mxGraphComponent(graph);
+        graphComponent.getGraphControl().addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                mxCell vertex = (mxCell) graphComponent.getCellAt(mouseEvent.getX(),mouseEvent.getY());
+                if(!vertex.isVertex())
+                    return;
+                UserInfoFrame infoFrame = new UserInfoFrame();
+                //infoFrame.showUserInfo();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+
+            }
+        });
         return graphComponent;
     }
 
@@ -59,6 +93,7 @@ public class MainWindow extends JFrame{
 
         DelButton.setBackground(colorForTools);
         DelButton.setEnabled(false);
+        DelButton.setToolTipText("Erase user from graph");
         DelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -77,11 +112,11 @@ public class MainWindow extends JFrame{
 
         DeleteAll.setBackground(colorForTools);
         DeleteAll.setEnabled(false);
+        DeleteAll.setToolTipText("Delete all graph");
         DeleteAll.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 graph.getModel().beginUpdate();
-                graph.setCellsMovable(true);
                 Object[] arr=graph.getChildVertices(graph.getDefaultParent());
 
                 for (Object c: arr)
@@ -101,6 +136,7 @@ public class MainWindow extends JFrame{
         ImageIcon addImg = new ImageIcon(System.getProperty("user.dir")+"/assets/Icons/add.png");
         JButton AddButton = new JButton("", addImg);
         AddButton.setBackground(colorForTools);
+        AddButton.setToolTipText("Add new user in graph");
         AddButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -135,7 +171,6 @@ public class MainWindow extends JFrame{
                 ArrayList<Integer> listEdges = mClient.getCommonFriends(user.userId,arrId);
                 //mList.setListData(VKUser.arrayToStrings(mUsers));
                 graph.getModel().beginUpdate();
-                graph.setCellsMovable(true);
                 try {
                     Object[] arr=graph.getChildVertices(graph.getDefaultParent());
                     Object vert1 = graph.insertVertex(graph.getDefaultParent(),((Integer)(user.userId)).toString(),user.firstName+" "+user.lastName,
@@ -159,7 +194,7 @@ public class MainWindow extends JFrame{
                     DelButton.setEnabled(true);
                     listModel.addElement(user);
                     layout.execute(graph.getDefaultParent());
-                    graph.setCellsMovable(false);
+
                     graph.getModel().endUpdate();
                 }
                 count++;
@@ -172,6 +207,7 @@ public class MainWindow extends JFrame{
         KraskalButton.setBackground(colorForTools);
         KraskalButton.setSize(new Dimension(1000,1000));
         KraskalButton.setEnabled(false);
+        KraskalButton.setToolTipText("Show maximal frame tree of graph");
 
         buttonBar.add(AddButton);
         buttonBar.add(DelButton);
@@ -220,7 +256,6 @@ public class MainWindow extends JFrame{
 
     private void delVertex(String id){
         graph.getModel().beginUpdate();
-        graph.setCellsMovable(true);
         try {
             Object[] arr=graph.getChildVertices(graph.getDefaultParent());
             for (Object c: arr) {
@@ -235,7 +270,6 @@ public class MainWindow extends JFrame{
         finally {
             layout.execute(graph.getDefaultParent());
             delVtxFromList(id);
-            graph.setCellsMovable(false);
             graph.getModel().endUpdate();
         }
     }
