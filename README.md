@@ -56,7 +56,7 @@ https://github.com/DarkFlink/VKFriends/wiki/Using-the-unit-tests
     * Строить минимальное/максимальное остовное дерево на основе базового графа.
  ### UML
  
- ![](https://github.com/DarkFlink/VKFriends/blob/f2d681c8df40a73b3416f5ffa224fa0f7d1096bf/docs/Images/UML.jpg)
+ ![](https://github.com/DarkFlink/VKFriends/blob/40f1ffd14b662564a0e20e7fea9ff966ae182b5b/docs/Images/UML.jpg)
     
     
 ### For contributors
