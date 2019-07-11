@@ -6,15 +6,15 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Map;
 
 import com.google.gson.*;
 
 public class VKClient {
 
-    public static final String[] basicArgs = {"id", "first_name", "last_name", "deactivated", "is_closed", "photo_50"};
+    public static final String[] basicArgs = {"id", "first_name", "last_name", "deactivated", "is_closed", "photo_50"
+                                                , "bdate", "sex", "education", "relation"};
 
-    private static final String accessVkApiToken = "key";
+    private static final String accessVkApiToken = "keygit";
     private static final String versionVkApi = "5.101";
     private static final String beginVkApi = "https://api.vk.com/method/";
     private static final String endVkApi = "&access_token=" + accessVkApiToken + "&v=" + versionVkApi;
@@ -111,10 +111,17 @@ public class VKClient {
         if(response.get("is_closed").getAsString().equals("true"))
             throw new InvalidParameterException("Invalid input, private/deleted profile.");
 
-        return new VKUser(response.get("id").getAsInt(),
+        VKUser user = new VKUser(response.get("id").getAsInt(),
                 response.get("first_name").getAsString(),
                 response.get("last_name").getAsString(),
                 response.get("photo_50").getAsString());
+
+        try { user.sex = response.get("sex").getAsInt(); } catch (Exception e) { System.out.println(e.getMessage()); }
+        try { user.relation = response.get("relation").getAsInt(); } catch (Exception e) {System.out.println(e.getMessage());}
+        try { user.education = response.get("university_name").getAsString(); } catch (Exception e) {System.out.println(e.getMessage());}
+        try { user.bdate = response.get("bdate").getAsString(); } catch (Exception e) {System.out.println(e.getMessage());}
+
+        return user;
     }
 
     public String getUserFriends(int userId, String[] args)
