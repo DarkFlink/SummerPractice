@@ -1,20 +1,14 @@
 package GUI;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 
 import com.mxgraph.layout.*;
 import com.mxgraph.swing.*;
-import com.mxgraph.util.mxEventObject;
 import com.mxgraph.view.*;
 import com.mxgraph.model.*;
-import com.mxgraph.util.mxEvent;
-import com.mxgraph.util.mxEventSource;
 
 import VKClient.VKClient;
 import VKClient.VKUser;
@@ -35,8 +29,9 @@ public class MainWindow extends JFrame{
     private mxIGraphLayout layout;
 
     private VKClient mClient;
-    private ArrayList<VKUser> mUsers;
-    Integer count = 2;
+    private Integer count = 2;
+
+
     protected mxGraphComponent makeGraph(){
         graph = new mxGraph();
         graph.setCellsResizable(false);
@@ -46,10 +41,11 @@ public class MainWindow extends JFrame{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 mxCell vertex = (mxCell) graphComponent.getCellAt(mouseEvent.getX(),mouseEvent.getY());
+                if(vertex==null)
+                    return;
                 if(!vertex.isVertex())
                     return;
-                UserInfoFrame infoFrame = new UserInfoFrame();
-                //infoFrame.showUserInfo();
+                new UserInfoFrame(graph,layout,listModel, vertex.getId());
             }
 
             @Override
@@ -106,7 +102,6 @@ public class MainWindow extends JFrame{
                     DelButton.setEnabled(false);
                     DeleteAll.setEnabled(false);
                 }
-                // TODO: remove vertex and edges
             }
         });
 
@@ -162,29 +157,29 @@ public class MainWindow extends JFrame{
                 int[] arrId= new int[listModel.size()];
                 for(int i=0;i<listModel.size();i++){
                     if(user.equals(listModel.get(i))) {
-                        getWarningMassage("dd");
+                        getWarningMassage("User already exist's");
                         return;
                     }
                     arrId[i]=listModel.get(i).userId;
 
                 }
                 ArrayList<Integer> listEdges = mClient.getCommonFriends(user.userId,arrId);
-                //mList.setListData(VKUser.arrayToStrings(mUsers));
                 graph.getModel().beginUpdate();
                 try {
                     Object[] arr=graph.getChildVertices(graph.getDefaultParent());
-                    Object vert1 = graph.insertVertex(graph.getDefaultParent(),((Integer)(user.userId)).toString(),user.firstName+" "+user.lastName,
+                    Object vert1 = graph.insertVertex(graph.getDefaultParent(),((Integer)(user.userId)).toString(),
+                            user.firstName+" "+user.lastName,
                             110,100,50,50,
-                            "verticalLabelPosition=bottom;fontColor=black;shape=image;image="+user.photoUrl);
-                    //if(arr.length!=0)
-                    //graph.insertEdge(graph.getDefaultParent(),null,"",vert1,arr[0]);
+                            "verticalLabelPosition=bottom;fontColor=black;shape=image;" +
+                                    "fontFamily=Times New Roman;image="+user.photoUrl);
                     for(int i=0;i<listEdges.size();i++){
                         if(listEdges.get(i)==0)
                             continue;
                         for (Object c: arr) {
                             mxCell vert2=(mxCell)c;
                             if(Integer.parseInt(vert2.getId())==listModel.get(i).userId) {
-                                graph.insertEdge(graph.getDefaultParent(),null,listEdges.get(i).toString(), vert1,vert2);
+                                graph.insertEdge(graph.getDefaultParent(),null,listEdges.get(i).toString(),
+                                        vert1,vert2,"endArrow=none");
                             }
                         }
                     }
@@ -198,21 +193,13 @@ public class MainWindow extends JFrame{
                     graph.getModel().endUpdate();
                 }
                 count++;
-                // TODO: add vertex and edges
             }
         });
 
-        ImageIcon refrImg = new ImageIcon(System.getProperty("user.dir")+"/assets/Icons/kraskal.png");
-        JButton KraskalButton = new JButton("",refrImg);
-        KraskalButton.setBackground(colorForTools);
-        KraskalButton.setSize(new Dimension(1000,1000));
-        KraskalButton.setEnabled(false);
-        KraskalButton.setToolTipText("Show maximal frame tree of graph");
 
         buttonBar.add(AddButton);
         buttonBar.add(DelButton);
         buttonBar.add(DeleteAll);
-        buttonBar.add(KraskalButton);
         buttonBar.setSize(Toolkit.getDefaultToolkit().getScreenSize().width,400);
 
         toolBar.add( buttonBar, BorderLayout.WEST);
@@ -226,8 +213,38 @@ public class MainWindow extends JFrame{
 
         listModel=new DefaultListModel<>();
         mList = new JList(listModel);
+        mList.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int ind=mList.getSelectedIndex();
+                new UserInfoFrame(graph,layout,listModel, ((Integer)listModel.get(ind).userId).toString());
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
         mList.setFixedCellWidth(leftPanelWidth);
         mList.setBackground(colorForTools);
+        mList.setForeground(colorForOther);
+        mList.setFont(new Font("New Roman",Font.BOLD,12));
         mxGraphOutline graphOutline = new mxGraphOutline(graphComponent);
         graphOutline.setPreferredSize(new Dimension(leftPanelWidth,leftPanelWidth));
         InputField = new JTextField();
@@ -248,7 +265,6 @@ public class MainWindow extends JFrame{
     private void setUpVKClient()
     {
         mClient = new VKClient();
-        mUsers = new ArrayList<VKUser>();
     }
     private void getWarningMassage(String error){
         JOptionPane.showMessageDialog(null,error);
@@ -281,12 +297,13 @@ public class MainWindow extends JFrame{
                 listModel.remove(i);
     }
 
-    public MainWindow() {
+    public MainWindow() throws Exception{
+        super("VKFriends");
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         }
         catch (Exception e){
-            //throw e;
+            throw e;
         }
         setSize(Toolkit.getDefaultToolkit().getScreenSize());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
