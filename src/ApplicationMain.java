@@ -1,36 +1,17 @@
-import VKClient.VKClient;
-import VKClient.VKUser;
 import GUI.*;
-import java.util.ArrayList;
+
+import javax.swing.*;
 
 public class ApplicationMain
 {
-    private static final String[]  requestArgs = {"photo50", "education"};
-
     public static void main(String[] args)
     {
-        new MainWindow();
+        try {
+            new MainWindow();
+        }
+        catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Unknown error!");
+        }
 
-        /*
-        VKClient vk = new VKClient();
-
-        int userID = 179878269;
-
-        // get json
-        String response = vk.getUserFriends(userID, orderFriends, requestArgs);
-        ArrayList<VKUser> list;
-
-        //информация о человеке
-        System.out.println(vk.getUser(userID, null));
-
-        list = vk.parseFriendsJson(response);// json -> ArrayList
-        // this only for result
-        if (list != null)
-            if(!list.isEmpty())
-                for (VKUser el : list)
-                    System.out.println(el.toString());
-            else
-                System.out.println("Empty list");
-*/
     }
 }

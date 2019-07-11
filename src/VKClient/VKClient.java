@@ -6,13 +6,13 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Map;
 
 import com.google.gson.*;
 
 public class VKClient {
 
-    public static final String[] basicArgs = {"id", "first_name", "last_name", "deactivated", "is_closed"};
+    public static final String[] basicArgs = {"id", "first_name", "last_name", "deactivated", "is_closed", "photo_50"
+                                                , "bdate", "sex", "education", "relation"};
 
     private static final String accessVkApiToken = "key";
     private static final String versionVkApi = "5.101";
@@ -40,7 +40,8 @@ public class VKClient {
                 JsonObject tmp = obj.getAsJsonObject();
                 list.add( new VKUser( tmp.get("id").getAsInt(),
                         tmp.get("first_name").getAsString(),
-                        tmp.get("last_name").getAsString()));
+                        tmp.get("last_name").getAsString(),
+                        tmp.get("photo_50").getAsString()));
             }
 
             return list;
@@ -53,10 +54,10 @@ public class VKClient {
         return null;
     }
 
-    public ArrayList<int[]> getCommonFriends(int srcId, int[] targetIds)
+    public ArrayList<Integer> getCommonFriends(int srcId, int[] targetIds)
     {
         ArrayList<VKUser> srcUser = getFriends(srcId, basicArgs);
-        ArrayList<int[]> cmnFriends = new ArrayList<int[]>();
+        ArrayList<Integer> cmnFriends = new ArrayList<Integer>();
         for(int it : targetIds)
         {
             ArrayList<VKUser> list = getFriends(it,  basicArgs);
@@ -64,8 +65,8 @@ public class VKClient {
             for(VKUser i : list)
                 if(srcUser.contains(i))
                     count++;
-            int[] ids = {it, count};
-            cmnFriends.add(ids);
+            int id = count;
+            cmnFriends.add(id);
         }
         return cmnFriends;
     }
@@ -87,6 +88,8 @@ public class VKClient {
                 id = getUserId(userId);
             }
         }
+        else
+            id = Integer.parseInt(userId);
 
 
         String sb = createGetRequest("users.get?user_ids=", id, args);
@@ -105,9 +108,20 @@ public class VKClient {
         System.out.println(request);
         JsonObject response = jo.get("response").getAsJsonArray().get(0).getAsJsonObject();
 
-        return new VKUser(response.get("id").getAsInt(),
+        if(response.get("is_closed").getAsString().equals("true"))
+            throw new InvalidParameterException("Invalid input, private/deleted profile.");
+
+        VKUser user = new VKUser(response.get("id").getAsInt(),
                 response.get("first_name").getAsString(),
-                response.get("last_name").getAsString());
+                response.get("last_name").getAsString(),
+                response.get("photo_50").getAsString());
+
+        try { user.sex = response.get("sex").getAsInt(); } catch (Exception e) { System.out.println(e.getMessage()); }
+        try { user.relation = response.get("relation").getAsInt(); } catch (Exception e) {System.out.println(e.getMessage());}
+        try { user.education = response.get("university_name").getAsString(); } catch (Exception e) {System.out.println(e.getMessage());}
+        try { user.bdate = response.get("bdate").getAsString(); } catch (Exception e) {System.out.println(e.getMessage());}
+
+        return user;
     }
 
     public String getUserFriends(int userId, String[] args)
