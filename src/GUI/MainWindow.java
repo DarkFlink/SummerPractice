@@ -35,6 +35,7 @@ public class MainWindow extends JFrame{
     protected mxGraphComponent makeGraph(){
         graph = new mxGraph();
         graph.setCellsResizable(false);
+        graph.setCellsEditable(false);
         layout = new mxOrganicLayout(graph);
         mxGraphComponent graphComponent = new mxGraphComponent(graph);
         graphComponent.getGraphControl().addMouseListener(new MouseListener() {
